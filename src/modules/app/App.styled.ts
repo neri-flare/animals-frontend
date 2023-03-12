@@ -17,18 +17,23 @@ export const Styled = {
   `,
   QueriesContainer: styled.div`
     display: flex;
-    flex-direction: row;
-    border: solid orange 2px;
-    border-radius: 5px;
-    padding: 24px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    /* border: solid orange 2px; */
+    box-shadow: 2px 5px 16px 0px #00000044;
+    border-radius: 10px;
+    padding: 28px;
   `,
   QueryLine: styled.div``,
   ResultsContainer: styled.div`
-    border: solid red 2px;
-    border-radius: 5px;
-    padding: 24px;
+    /* border: solid red 2px; */
+    box-shadow: 2px 5px 16px 0px #00000044;
+    border-radius: 10px;
+    padding: 28px;
   `,
   BoldText: styled.span`
     font-weight: 700;
   `,
+  P: styled.p``,
 };

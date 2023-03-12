@@ -114,13 +114,14 @@ const App = () => {
         </Styled.QueriesContainer>
         <Styled.ResultsContainer>
           <p>
-            Results: 
+            <Styled.BoldText>
+            Results:
+              </Styled.BoldText>
             </p>
           {
             <div>
-              {parsedResult.map(keyValuePair => <p><Styled.BoldText>{`${keyValuePair[0]}: `}</Styled.BoldText>{`${keyValuePair[0]}`}</p>)}
+              {parsedResult.map((keyValuePair) => <p key={''+keyValuePair[0]}><Styled.BoldText>{`${keyValuePair[0]}: `}</Styled.BoldText>{`${keyValuePair[1]}`}</p>)}
             </div>
-            
           }
         </Styled.ResultsContainer>
         </Styled.Section>
