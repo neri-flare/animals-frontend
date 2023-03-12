@@ -1,47 +1,12 @@
 import React, { useState } from 'react';
 import { Styled } from './App.styled';
-import { useQuery, gql, useLazyQuery } from '@apollo/client';
-
-interface Dog {
-  name: string;
-  breed: string;
-  gender: string;
-  ownerId?: string;
-}
+import { useLazyQuery } from '@apollo/client';
+import { GET_DOGS_NAMES, GET_DOG } from '../../graphql/dog.graphql';
+import { GET_CAT, GET_CATS_NAMES } from '../../graphql/cat.graphql';
+import { GET_ELEPHANT, GET_ELEPHANTS_NAMES } from '../../graphql/elephant.graphql';
+import { GET_OWNER, GET_OWNERS_NAMES } from '../../graphql/owner.graphql';
 
 
-const GET_DOG = gql`
-query Dog($name: String!) {
-  dog(name: $name) {
-    name
-    breed
-    gender
-    ownerId
-    owner {
-      name
-      gender
-      age
-    }
-  }
-}
-`;
-
-const GET_ALL_DOGS = gql`
-query Dogs {
-  dogs {
-    id
-    name
-    breed
-    gender
-    ownerId
-    owner {
-      name
-      age
-      gender
-    }
-  }
-}
-`
 
 const App = () => {
   const [currentEntity, setCurrentEntity] = useState<string>('')
