@@ -22,9 +22,13 @@ export const Styled = {
     border-radius: 5px;
     padding: 24px;
   `,
+  QueryLine: styled.div``,
   ResultsContainer: styled.div`
     border: solid red 2px;
     border-radius: 5px;
     padding: 24px;
+  `,
+  BoldText: styled.span`
+    font-weight: 700;
   `,
 };
