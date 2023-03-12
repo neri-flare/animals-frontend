@@ -13,21 +13,19 @@ export const Styled = {
   `,
   Section: styled.section`
     display: flex;
-    gap: 16px;
+    gap: 64px;
   `,
   QueriesContainer: styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 16px;
-    /* border: solid orange 2px; */
     box-shadow: 2px 5px 16px 0px #00000044;
     border-radius: 10px;
     padding: 28px;
   `,
   QueryLine: styled.div``,
   ResultsContainer: styled.div`
-    /* border: solid red 2px; */
     box-shadow: 2px 5px 16px 0px #00000044;
     border-radius: 10px;
     padding: 28px;
@@ -35,5 +33,7 @@ export const Styled = {
   BoldText: styled.span`
     font-weight: 700;
   `,
-  P: styled.p``,
+  Result: styled.p`
+    padding-inline: 32px;
+  `,
 };

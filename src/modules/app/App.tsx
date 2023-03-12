@@ -5,46 +5,64 @@ import { GET_DOGS_NAMES, GET_DOG } from '../../graphql/dog.graphql';
 import { GET_CAT, GET_CATS_NAMES } from '../../graphql/cat.graphql';
 import { GET_ELEPHANT, GET_ELEPHANTS_NAMES } from '../../graphql/elephant.graphql';
 import { GET_OWNER, GET_OWNERS_NAMES } from '../../graphql/owner.graphql';
+import { recursivelyParseObject } from './utils';
 
 
 
 const App = () => {
   const [currentEntity, setCurrentEntity] = useState<string>('')
-  const [parsedResult, setParsedResult] = useState<unknown[][]>([])
+  const [parsedResults, setParsedResults] = useState<unknown[] | unknown[][]>([])
+  
   const [getDog, { data: dog }] = useLazyQuery(GET_DOG);
-  const [getAllDogs, { data: { dogs: allDogs = [] } = {} }] = useLazyQuery(GET_ALL_DOGS);
+  const [getCat, { data: cat }] = useLazyQuery(GET_CAT);
+  const [getElephant, { data: elephant }] = useLazyQuery(GET_ELEPHANT);
+  const [getOwner, { data: owner }] = useLazyQuery(GET_OWNER);
+
+  const [getDogsNames, { data: { dogs: allDogs = [] } = {} }] = useLazyQuery(GET_DOGS_NAMES);
+  const [getCatsNames, { data: { cats: allCats = [] } = {} }] = useLazyQuery(GET_CATS_NAMES);
+  const [getElephantsNames, { data: { elephants: allElephants = [] } = {} }] = useLazyQuery(GET_ELEPHANTS_NAMES);
+  const [getOwnersNames, { data: { owners: allOwners = [] } = {} }] = useLazyQuery(GET_OWNERS_NAMES);
 
   const entities: {
     [key: string]: { getNames: Function, names: any[], getByName: Function, result: any }
   } = {
-    dog: { getNames: getAllDogs, names: allDogs || [], getByName: getDog, result: dog || {} }
-    // 'cat': allCats
-    // 'elephant': allElephants,
-    // 'owner': allOwners
+    dog: { getNames: getDogsNames, names: allDogs || [], getByName: getDog, result: dog || {} },
+    cat: { getNames: getCatsNames, names: allCats || [], getByName: getCat, result: cat || {} },
+    elephant: { getNames: getElephantsNames, names: allElephants || [], getByName: getElephant, result: elephant || {} },
+    owner: { getNames: getOwnersNames, names: allOwners || [], getByName: getOwner, result: owner || {} },
   }
 
   const onEntityChoose = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedEntity = event?.target?.value
     setCurrentEntity(selectedEntity)
-    entities[selectedEntity].getNames()
+    entities[selectedEntity].getNames()    
   }
 
   const onNameChoose = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedName = event?.target?.value
     const result = await entities[currentEntity].getByName({ variables: { name: selectedName }})
-    // console.log(result);
     const { data: { [currentEntity]: objectToParse = {} } = {} } = result
-    
 
-    let resultArray = []
-    for (const [key, value] of Object.entries(objectToParse)) {
-      if(key === '__typename' || !value) continue
-      resultArray.push([key, value])
-    }
-    // console.log(resultArray);
+    const parsedObjectTo2dArray = recursivelyParseObject(objectToParse)
 
-    setParsedResult(resultArray)
+    setParsedResults(parsedObjectTo2dArray)
   }
+
+  const renderResults = (results: unknown[] = []) => (results.map((keyValuePair) => {
+      if (Array.isArray(keyValuePair)) {
+        return (<Styled.Result key={''+keyValuePair[0]}>
+          <Styled.BoldText>{`${keyValuePair[0]}: `}</Styled.BoldText>
+          {
+            Array.isArray(keyValuePair[1])
+            ?
+            renderResults(keyValuePair[1])
+            :
+          `${keyValuePair[1]}`
+          }
+          </Styled.Result>)
+      }
+      return <></>
+  }))
 
   return (
     <div className="App">
@@ -85,7 +103,7 @@ const App = () => {
             </p>
           {
             <div>
-              {parsedResult.map((keyValuePair) => <p key={''+keyValuePair[0]}><Styled.BoldText>{`${keyValuePair[0]}: `}</Styled.BoldText>{`${keyValuePair[1]}`}</p>)}
+              {renderResults(parsedResults)}
             </div>
           }
         </Styled.ResultsContainer>
