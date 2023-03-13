@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Styled } from "./App.styled";
 import { useLazyQuery } from "@apollo/client";
 import { GET_DOGS_NAMES, GET_DOG } from "../../graphql/dog.graphql";
@@ -8,15 +8,11 @@ import {
   GET_ELEPHANTS_NAMES,
 } from "../../graphql/elephant.graphql";
 import { GET_OWNER, GET_OWNERS_NAMES } from "../../graphql/owner.graphql";
-import { recursivelyParseObject } from "./utils";
-import { Select } from "../../components/Select";
-import { Results } from "../../components/Select/Results/Results";
-
-const entityOptions = ["dog", "cat", "elephant", "owner"];
+import { Results } from "../../components/Results/Results";
+import { QueriesContainer } from "../../components/QueriesContainer/QueriesContainer";
+import { Entities } from "./App.types";
 
 const App = () => {
-  const [currentEntity, setCurrentEntity] = useState<string>("");
-  const [currentName, setCurrentName] = useState<string>("")
   const [parsedResults, setParsedResults] = useState<unknown[] | unknown[][]>(
     []
   );
@@ -35,14 +31,9 @@ const App = () => {
   const [getOwnersNames, { data: { owners: allOwners = [] } = {} }] =
     useLazyQuery(GET_OWNERS_NAMES);
 
-  const entities: {
-    [key: string]: {
-      getNames: Function;
-      names: any[];
-      getByName: Function;
-      result: any;
-    };
-  } = {
+
+
+  const entities: Entities = {
     dog: {
       getNames: getDogsNames,
       names: allDogs || [],
@@ -69,64 +60,17 @@ const App = () => {
     },
   };
 
-  const onEntityChoose = async (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const selectedEntity = event?.target?.value;
-    setCurrentEntity(selectedEntity);
-    entities[selectedEntity].getNames();
-  };
-
-  const onNameChoose = async (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedName = event?.target?.value;
-
-    setCurrentName(selectedName)
-
-    const result = await entities[currentEntity].getByName({
-      variables: { name: selectedName },
-    });
-    const { data: { [currentEntity]: objectToParse = {} } = {} } = result;
-
-    const parsedObjectTo2dArray = recursivelyParseObject(objectToParse);
-
-    setParsedResults(parsedObjectTo2dArray);
-  };
-
   return (
     <div className="App">
       <Styled.MainContainer>
         <Styled.Header>Animals</Styled.Header>
         <Styled.Section>
-          <Styled.QueriesContainer>
-            <Styled.QueryLine>
-              Get the{" "}
-              <Select
-                name="entity"
-                value={currentEntity}
-                options={entityOptions}
-                onChangeHandler={onEntityChoose}
-              />{" "}
-              with the name:{" "}
-              {
-                <Select
-                name="name"
-                value={currentName}
-                onChangeHandler={onNameChoose}
-                options={
-                  (entities &&
-                  entities[currentEntity] &&
-                  entities[currentEntity].names.length &&
-                  entities[currentEntity].names.map((animal) => animal.name)) || []
-                }
-                />
-              }
-            </Styled.QueryLine>
-          </Styled.QueriesContainer>
+          <QueriesContainer entities={entities} setParsedResults={setParsedResults}/>
           <Styled.ResultsContainer>
             <p>
               <Styled.BoldText>Results:</Styled.BoldText>
             </p>
-            {<Results results={parsedResults}/>}
+            {<Results results={parsedResults} />}
           </Styled.ResultsContainer>
         </Styled.Section>
       </Styled.MainContainer>

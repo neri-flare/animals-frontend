@@ -1,5 +1,6 @@
 import React from "react";
-import { Styled } from "../../../modules/app/App.styled";
+import { Styled } from "./Results.styled";
+
 
 interface Props {
   results: unknown[];

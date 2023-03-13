@@ -15,16 +15,6 @@ export const Styled = {
     display: flex;
     gap: 64px;
   `,
-  QueriesContainer: styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 16px;
-    box-shadow: 2px 5px 16px 0px #00000044;
-    border-radius: 10px;
-    padding: 28px;
-  `,
-  QueryLine: styled.div``,
   ResultsContainer: styled.div`
     box-shadow: 2px 5px 16px 0px #00000044;
     border-radius: 10px;
@@ -32,10 +22,5 @@ export const Styled = {
   `,
   BoldText: styled.span`
     font-weight: 700;
-  `,
-  Result: styled.div`
-    display: block;
-    padding-inline: 32px;
-    margin-block: 16px;
   `,
 };
