@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  CreateDogMutation,
   Dog,
   DogInput,
   useCreateDogMutation,
@@ -19,7 +20,7 @@ export const CreateDogQuery: React.FC<Props> = ({ setParsedResults }) => {
     ownerId: "",
   });
 
-  const [createDogMutation, { data: createdDog }] = useCreateDogMutation({
+  const [createDogMutation] = useCreateDogMutation({
     variables: { createDogInput: dogProperties },
   });
 
@@ -29,6 +30,8 @@ export const CreateDogQuery: React.FC<Props> = ({ setParsedResults }) => {
 
   const onCreateSubmit = async () => {
     await createDogMutation();
+    const { data: { createDog: createdDog } = {} } =
+      (await createDogMutation()) as { data: CreateDogMutation };
 
     if (createdDog) {
       const parsedObjectTo2dArray = recursivelyParseObject(createdDog);

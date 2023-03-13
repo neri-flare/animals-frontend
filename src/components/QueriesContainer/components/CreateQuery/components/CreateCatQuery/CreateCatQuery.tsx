@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Cat,
   CatInput,
+  CreateCatMutation,
   useCreateCatMutation,
 } from "../../../../../../generated/graphql";
 import { recursivelyParseObject } from "../../../../../../modules/app/utils";
@@ -18,7 +19,7 @@ export const CreateCatQuery: React.FC<Props> = ({ setParsedResults }) => {
     ownerId: "",
   });
 
-  const [createCatMutation, { data: createdCat }] = useCreateCatMutation({
+  const [createCatMutation] = useCreateCatMutation({
     variables: { createCatInput: catProperties },
   });
 
@@ -27,7 +28,8 @@ export const CreateCatQuery: React.FC<Props> = ({ setParsedResults }) => {
   };
 
   const onCreateSubmit = async () => {
-    await createCatMutation();
+    const { data: { createCat: createdCat } = {} } =
+      (await createCatMutation()) as { data: CreateCatMutation };
 
     if (createdCat) {
       const parsedObjectTo2dArray = recursivelyParseObject(createdCat);

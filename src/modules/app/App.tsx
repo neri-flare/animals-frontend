@@ -40,7 +40,7 @@ const App = () => {
     });
   const [getOwnersNames, { data: { owners: ownersNames = [] } = {} }] =
     useOwnersLazyQuery({
-      fetchPolicy: "network-only", // ?
+      fetchPolicy: "network-only",
     });
 
   const entities: Entities = {

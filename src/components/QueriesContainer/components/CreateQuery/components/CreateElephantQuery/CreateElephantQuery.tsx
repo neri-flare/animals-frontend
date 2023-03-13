@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  CreateElephantMutation,
   Elephant,
   ElephantInput,
   useCreateElephantMutation,
@@ -19,22 +20,22 @@ export const CreateElephantQuery: React.FC<Props> = ({ setParsedResults }) => {
     ownerId: "",
   });
 
-  const [createElephantMutation, { data: createdElephant }] =
-    useCreateElephantMutation({
-      variables: {
-        createElephantInput: {
-          ...elephantProperties,
-          trunkLength: parseInt("" + elephantProperties.trunkLength),
-        },
+  const [createElephantMutation] = useCreateElephantMutation({
+    variables: {
+      createElephantInput: {
+        ...elephantProperties,
+        trunkLength: parseInt("" + elephantProperties.trunkLength),
       },
-    });
+    },
+  });
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     onPropertiesChange<Elephant>(event, setElephantProperties);
   };
 
   const onCreateSubmit = async () => {
-    await createElephantMutation();
+    const { data: { createElephant: createdElephant } = {} } =
+      (await createElephantMutation()) as { data: CreateElephantMutation };
 
     if (createdElephant) {
       const parsedObjectTo2dArray = recursivelyParseObject(createdElephant);
