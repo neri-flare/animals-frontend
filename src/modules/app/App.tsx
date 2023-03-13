@@ -63,7 +63,13 @@ const App = () => {
   return (
     <div className="App">
       <Styled.MainContainer>
-        <Styled.Header>Animals</Styled.Header>
+        <Styled.HeaderContainer>
+          <img
+            src="https://a.storyblok.com/f/106832/x/67ab956c57/bankruptcy.svg"
+            alt="pig money box"
+          ></img>
+          <Styled.Header>Animals</Styled.Header>
+        </Styled.HeaderContainer>
         <Styled.Section>
           <QueriesContainer
             entities={entities}
