@@ -57,14 +57,14 @@ export type Elephant = {
   name: Scalars['String'];
   owner?: Maybe<Owner>;
   ownerId?: Maybe<Scalars['String']>;
-  trunkLength: Scalars['Float'];
+  trunkLength: Scalars['Int'];
 };
 
 export type ElephantInput = {
   gender: Scalars['String'];
   name: Scalars['String'];
   ownerId?: InputMaybe<Scalars['String']>;
-  trunkLength: Scalars['Float'];
+  trunkLength: Scalars['Int'];
 };
 
 export type Mutation = {
@@ -224,7 +224,6 @@ export type ResolversTypes = {
   DogInput: DogInput;
   Elephant: ResolverTypeWrapper<Elephant>;
   ElephantInput: ElephantInput;
-  Float: ResolverTypeWrapper<Scalars['Float']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Owner: ResolverTypeWrapper<Owner>;
@@ -242,7 +241,6 @@ export type ResolversParentTypes = {
   DogInput: DogInput;
   Elephant: Elephant;
   ElephantInput: ElephantInput;
-  Float: Scalars['Float'];
   Int: Scalars['Int'];
   Mutation: {};
   Owner: Owner;
@@ -276,7 +274,7 @@ export type ElephantResolvers<ContextType = any, ParentType extends ResolversPar
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owner?: Resolver<Maybe<ResolversTypes['Owner']>, ParentType, ContextType>;
   ownerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  trunkLength?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  trunkLength?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -329,6 +327,13 @@ export type CatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CatsQuery = { __typename?: 'Query', cats: Array<{ __typename?: 'Cat', name: string }> };
 
+export type CreateCatMutationVariables = Exact<{
+  createCatInput: CatInput;
+}>;
+
+
+export type CreateCatMutation = { __typename?: 'Mutation', createCat: { __typename?: 'Cat', name: string, color?: string | null | undefined, ownerId?: string | null | undefined, owner?: { __typename?: 'Owner', age?: number | null | undefined, gender: string, name: string } | null | undefined } };
+
 export type DogQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -340,6 +345,13 @@ export type DogsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type DogsQuery = { __typename?: 'Query', dogs: Array<{ __typename?: 'Dog', name: string }> };
+
+export type CreateDogMutationVariables = Exact<{
+  createDogInput: DogInput;
+}>;
+
+
+export type CreateDogMutation = { __typename?: 'Mutation', createDog: { __typename?: 'Dog', name: string, breed: string, gender: string, owner?: { __typename?: 'Owner', name: string, gender: string, age?: number | null | undefined } | null | undefined } };
 
 export type ElephantQueryVariables = Exact<{
   name: Scalars['String'];
@@ -353,17 +365,31 @@ export type ElephantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ElephantsQuery = { __typename?: 'Query', elephants: Array<{ __typename?: 'Elephant', name: string }> };
 
+export type CreateElephantMutationVariables = Exact<{
+  createElephantInput: ElephantInput;
+}>;
+
+
+export type CreateElephantMutation = { __typename?: 'Mutation', createElephant: { __typename?: 'Elephant', name: string, trunkLength: number, gender: string, ownerId?: string | null | undefined, owner?: { __typename?: 'Owner', name: string, gender: string, age?: number | null | undefined } | null | undefined } };
+
 export type OwnerQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
 
-export type OwnerQuery = { __typename?: 'Query', owner: { __typename?: 'Owner', name: string, age?: number | null | undefined, gender: string } };
+export type OwnerQuery = { __typename?: 'Query', owner: { __typename?: 'Owner', id: string, name: string, age?: number | null | undefined, gender: string } };
 
 export type OwnersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OwnersQuery = { __typename?: 'Query', owners: Array<{ __typename?: 'Owner', name: string }> };
+
+export type CreateOwnerMutationVariables = Exact<{
+  createOwnerData: OwnerInput;
+}>;
+
+
+export type CreateOwnerMutation = { __typename?: 'Mutation', createOwner: { __typename?: 'Owner', id: string, name: string, age?: number | null | undefined, gender: string } };
 
 
 export const CatDocument = gql`
@@ -447,6 +473,46 @@ export type CatsQueryResult = Apollo.QueryResult<CatsQuery, CatsQueryVariables>;
 export function refetchCatsQuery(variables?: CatsQueryVariables) {
       return { query: CatsDocument, variables: variables }
     }
+export const CreateCatDocument = gql`
+    mutation CreateCat($createCatInput: CatInput!) {
+  createCat(createCatInput: $createCatInput) {
+    name
+    color
+    ownerId
+    owner {
+      age
+      gender
+      name
+    }
+  }
+}
+    `;
+export type CreateCatMutationFn = Apollo.MutationFunction<CreateCatMutation, CreateCatMutationVariables>;
+
+/**
+ * __useCreateCatMutation__
+ *
+ * To run a mutation, you first call `useCreateCatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCatMutation, { data, loading, error }] = useCreateCatMutation({
+ *   variables: {
+ *      createCatInput: // value for 'createCatInput'
+ *   },
+ * });
+ */
+export function useCreateCatMutation(baseOptions?: Apollo.MutationHookOptions<CreateCatMutation, CreateCatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCatMutation, CreateCatMutationVariables>(CreateCatDocument, options);
+      }
+export type CreateCatMutationHookResult = ReturnType<typeof useCreateCatMutation>;
+export type CreateCatMutationResult = Apollo.MutationResult<CreateCatMutation>;
+export type CreateCatMutationOptions = Apollo.BaseMutationOptions<CreateCatMutation, CreateCatMutationVariables>;
 export const DogDocument = gql`
     query Dog($name: String!) {
   dog(name: $name) {
@@ -529,6 +595,46 @@ export type DogsQueryResult = Apollo.QueryResult<DogsQuery, DogsQueryVariables>;
 export function refetchDogsQuery(variables?: DogsQueryVariables) {
       return { query: DogsDocument, variables: variables }
     }
+export const CreateDogDocument = gql`
+    mutation CreateDog($createDogInput: DogInput!) {
+  createDog(createDogInput: $createDogInput) {
+    name
+    breed
+    gender
+    owner {
+      name
+      gender
+      age
+    }
+  }
+}
+    `;
+export type CreateDogMutationFn = Apollo.MutationFunction<CreateDogMutation, CreateDogMutationVariables>;
+
+/**
+ * __useCreateDogMutation__
+ *
+ * To run a mutation, you first call `useCreateDogMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDogMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDogMutation, { data, loading, error }] = useCreateDogMutation({
+ *   variables: {
+ *      createDogInput: // value for 'createDogInput'
+ *   },
+ * });
+ */
+export function useCreateDogMutation(baseOptions?: Apollo.MutationHookOptions<CreateDogMutation, CreateDogMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDogMutation, CreateDogMutationVariables>(CreateDogDocument, options);
+      }
+export type CreateDogMutationHookResult = ReturnType<typeof useCreateDogMutation>;
+export type CreateDogMutationResult = Apollo.MutationResult<CreateDogMutation>;
+export type CreateDogMutationOptions = Apollo.BaseMutationOptions<CreateDogMutation, CreateDogMutationVariables>;
 export const ElephantDocument = gql`
     query Elephant($name: String!) {
   elephant(name: $name) {
@@ -611,9 +717,51 @@ export type ElephantsQueryResult = Apollo.QueryResult<ElephantsQuery, ElephantsQ
 export function refetchElephantsQuery(variables?: ElephantsQueryVariables) {
       return { query: ElephantsDocument, variables: variables }
     }
+export const CreateElephantDocument = gql`
+    mutation CreateElephant($createElephantInput: ElephantInput!) {
+  createElephant(createElephantInput: $createElephantInput) {
+    name
+    trunkLength
+    gender
+    ownerId
+    owner {
+      name
+      gender
+      age
+    }
+  }
+}
+    `;
+export type CreateElephantMutationFn = Apollo.MutationFunction<CreateElephantMutation, CreateElephantMutationVariables>;
+
+/**
+ * __useCreateElephantMutation__
+ *
+ * To run a mutation, you first call `useCreateElephantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateElephantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createElephantMutation, { data, loading, error }] = useCreateElephantMutation({
+ *   variables: {
+ *      createElephantInput: // value for 'createElephantInput'
+ *   },
+ * });
+ */
+export function useCreateElephantMutation(baseOptions?: Apollo.MutationHookOptions<CreateElephantMutation, CreateElephantMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateElephantMutation, CreateElephantMutationVariables>(CreateElephantDocument, options);
+      }
+export type CreateElephantMutationHookResult = ReturnType<typeof useCreateElephantMutation>;
+export type CreateElephantMutationResult = Apollo.MutationResult<CreateElephantMutation>;
+export type CreateElephantMutationOptions = Apollo.BaseMutationOptions<CreateElephantMutation, CreateElephantMutationVariables>;
 export const OwnerDocument = gql`
     query Owner($name: String!) {
   owner(name: $name) {
+    id
     name
     age
     gender
@@ -688,3 +836,39 @@ export type OwnersQueryResult = Apollo.QueryResult<OwnersQuery, OwnersQueryVaria
 export function refetchOwnersQuery(variables?: OwnersQueryVariables) {
       return { query: OwnersDocument, variables: variables }
     }
+export const CreateOwnerDocument = gql`
+    mutation CreateOwner($createOwnerData: OwnerInput!) {
+  createOwner(createOwnerData: $createOwnerData) {
+    id
+    name
+    age
+    gender
+  }
+}
+    `;
+export type CreateOwnerMutationFn = Apollo.MutationFunction<CreateOwnerMutation, CreateOwnerMutationVariables>;
+
+/**
+ * __useCreateOwnerMutation__
+ *
+ * To run a mutation, you first call `useCreateOwnerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOwnerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOwnerMutation, { data, loading, error }] = useCreateOwnerMutation({
+ *   variables: {
+ *      createOwnerData: // value for 'createOwnerData'
+ *   },
+ * });
+ */
+export function useCreateOwnerMutation(baseOptions?: Apollo.MutationHookOptions<CreateOwnerMutation, CreateOwnerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOwnerMutation, CreateOwnerMutationVariables>(CreateOwnerDocument, options);
+      }
+export type CreateOwnerMutationHookResult = ReturnType<typeof useCreateOwnerMutation>;
+export type CreateOwnerMutationResult = Apollo.MutationResult<CreateOwnerMutation>;
+export type CreateOwnerMutationOptions = Apollo.BaseMutationOptions<CreateOwnerMutation, CreateOwnerMutationVariables>;

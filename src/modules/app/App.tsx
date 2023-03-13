@@ -19,19 +19,29 @@ const App = () => {
     []
   );
 
+  // get entity hooks
   const [getDog, { data: dog }] = useDogLazyQuery();
   const [getCat, { data: cat }] = useCatLazyQuery();
   const [getElephant, { data: elephant }] = useElephantLazyQuery();
   const [getOwner, { data: owner }] = useOwnerLazyQuery();
 
+  // get entity names hooks
   const [getDogsNames, { data: { dogs: dogsNames = [] } = {} }] =
-    useDogsLazyQuery();
+    useDogsLazyQuery({
+      fetchPolicy: "network-only",
+    });
   const [getCatsNames, { data: { cats: catsNames = [] } = {} }] =
-    useCatsLazyQuery();
+    useCatsLazyQuery({
+      fetchPolicy: "network-only",
+    });
   const [getElephantsNames, { data: { elephants: elephantsNames = [] } = {} }] =
-    useElephantsLazyQuery();
+    useElephantsLazyQuery({
+      fetchPolicy: "network-only",
+    });
   const [getOwnersNames, { data: { owners: ownersNames = [] } = {} }] =
-    useOwnersLazyQuery();
+    useOwnersLazyQuery({
+      fetchPolicy: "network-only", // ?
+    });
 
   const entities: Entities = {
     dog: {

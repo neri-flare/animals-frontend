@@ -22,3 +22,19 @@ export const GET_ELEPHANTS_NAMES = gql`
     }
   }
 `;
+
+export const CREATE_ELEPHANT = gql`
+  mutation CreateElephant($createElephantInput: ElephantInput!) {
+    createElephant(createElephantInput: $createElephantInput) {
+      name
+      trunkLength
+      gender
+      ownerId
+      owner {
+        name
+        gender
+        age
+      }
+    }
+  }
+`;

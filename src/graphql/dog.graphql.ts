@@ -22,3 +22,18 @@ export const GET_DOGS_NAMES = gql`
     }
   }
 `;
+
+export const CREATE_DOG = gql`
+  mutation CreateDog($createDogInput: DogInput!) {
+    createDog(createDogInput: $createDogInput) {
+      name
+      breed
+      gender
+      owner {
+        name
+        gender
+        age
+      }
+    }
+  }
+`;

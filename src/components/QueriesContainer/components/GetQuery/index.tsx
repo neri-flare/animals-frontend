@@ -1,0 +1,1 @@
+export { GetQuery } from "./GetQuery";

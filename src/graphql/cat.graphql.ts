@@ -21,3 +21,18 @@ export const GET_CATS_NAMES = gql`
     }
   }
 `;
+
+export const CREATE_CAT = gql`
+  mutation CreateCat($createCatInput: CatInput!) {
+    createCat(createCatInput: $createCatInput) {
+      name
+      color
+      ownerId
+      owner {
+        age
+        gender
+        name
+      }
+    }
+  }
+`;
