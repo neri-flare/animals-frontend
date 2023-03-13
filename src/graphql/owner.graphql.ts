@@ -11,7 +11,7 @@ export const GET_OWNER = gql`
 `;
 
 export const GET_OWNERS_NAMES = gql`
-  query Ownerss {
+  query Owners {
     owners {
       name
     }

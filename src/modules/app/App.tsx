@@ -1,60 +1,60 @@
 import { useState } from "react";
 import { Styled } from "./App.styled";
-import { useLazyQuery } from "@apollo/client";
-import { GET_DOGS_NAMES, GET_DOG } from "../../graphql/dog.graphql";
-import { GET_CAT, GET_CATS_NAMES } from "../../graphql/cat.graphql";
-import {
-  GET_ELEPHANT,
-  GET_ELEPHANTS_NAMES,
-} from "../../graphql/elephant.graphql";
-import { GET_OWNER, GET_OWNERS_NAMES } from "../../graphql/owner.graphql";
 import { Results } from "../../components/Results/Results";
 import { QueriesContainer } from "../../components/QueriesContainer/QueriesContainer";
 import { Entities } from "./App.types";
+import {
+  useCatLazyQuery,
+  useCatsLazyQuery,
+  useDogLazyQuery,
+  useDogsLazyQuery,
+  useElephantLazyQuery,
+  useElephantsLazyQuery,
+  useOwnerLazyQuery,
+  useOwnersLazyQuery,
+} from "../../generated/graphql";
 
 const App = () => {
   const [parsedResults, setParsedResults] = useState<unknown[] | unknown[][]>(
     []
   );
 
-  const [getDog, { data: dog }] = useLazyQuery(GET_DOG);
-  const [getCat, { data: cat }] = useLazyQuery(GET_CAT);
-  const [getElephant, { data: elephant }] = useLazyQuery(GET_ELEPHANT);
-  const [getOwner, { data: owner }] = useLazyQuery(GET_OWNER);
+  const [getDog, { data: dog }] = useDogLazyQuery();
+  const [getCat, { data: cat }] = useCatLazyQuery();
+  const [getElephant, { data: elephant }] = useElephantLazyQuery();
+  const [getOwner, { data: owner }] = useOwnerLazyQuery();
 
-  const [getDogsNames, { data: { dogs: allDogs = [] } = {} }] =
-    useLazyQuery(GET_DOGS_NAMES);
-  const [getCatsNames, { data: { cats: allCats = [] } = {} }] =
-    useLazyQuery(GET_CATS_NAMES);
-  const [getElephantsNames, { data: { elephants: allElephants = [] } = {} }] =
-    useLazyQuery(GET_ELEPHANTS_NAMES);
-  const [getOwnersNames, { data: { owners: allOwners = [] } = {} }] =
-    useLazyQuery(GET_OWNERS_NAMES);
-
-
+  const [getDogsNames, { data: { dogs: dogsNames = [] } = {} }] =
+    useDogsLazyQuery();
+  const [getCatsNames, { data: { cats: catsNames = [] } = {} }] =
+    useCatsLazyQuery();
+  const [getElephantsNames, { data: { elephants: elephantsNames = [] } = {} }] =
+    useElephantsLazyQuery();
+  const [getOwnersNames, { data: { owners: ownersNames = [] } = {} }] =
+    useOwnersLazyQuery();
 
   const entities: Entities = {
     dog: {
       getNames: getDogsNames,
-      names: allDogs || [],
+      names: dogsNames || [],
       getByName: getDog,
       result: dog || {},
     },
     cat: {
       getNames: getCatsNames,
-      names: allCats || [],
+      names: catsNames || [],
       getByName: getCat,
       result: cat || {},
     },
     elephant: {
       getNames: getElephantsNames,
-      names: allElephants || [],
+      names: elephantsNames || [],
       getByName: getElephant,
       result: elephant || {},
     },
     owner: {
       getNames: getOwnersNames,
-      names: allOwners || [],
+      names: ownersNames || [],
       getByName: getOwner,
       result: owner || {},
     },
@@ -65,7 +65,10 @@ const App = () => {
       <Styled.MainContainer>
         <Styled.Header>Animals</Styled.Header>
         <Styled.Section>
-          <QueriesContainer entities={entities} setParsedResults={setParsedResults}/>
+          <QueriesContainer
+            entities={entities}
+            setParsedResults={setParsedResults}
+          />
           <Styled.ResultsContainer>
             <p>
               <Styled.BoldText>Results:</Styled.BoldText>

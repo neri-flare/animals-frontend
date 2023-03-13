@@ -1,0 +1,18 @@
+overwrite: true
+generates:
+  src/generated/graphql.tsx:
+    documents:
+      - "src/graphql/*.graphql.ts"
+    schema:
+      - "http://localhost:3000/graphql"
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - "typescript"
+      - typescript-resolvers
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      withRefetchFn: true
+      maybeValue: T | null | undefined
+      preResolveTypes: true
