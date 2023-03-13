@@ -33,7 +33,9 @@ export const Styled = {
   BoldText: styled.span`
     font-weight: 700;
   `,
-  Result: styled.p`
+  Result: styled.div`
+    display: block;
     padding-inline: 32px;
+    margin-block: 16px;
   `,
 };
