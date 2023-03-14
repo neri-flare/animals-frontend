@@ -23,6 +23,7 @@ export const Styled = {
   Section: styled.section`
     display: flex;
     gap: 64px;
+    min-height: 208px;
   `,
   ResultsContainer: styled.div`
     box-shadow: 2px 5px 16px 0px #00000044;
